@@ -5,48 +5,56 @@ root = Tk()
 
 def add_new_record(var_add_new_record_name, var_add_new_record_sap, var_add_new_record_contact, var_add_new_record_cource, textbox) :
     with open("StudentRecord.txt", "a") as f :
-       f.write(var_add_new_record_name + " ")
-       f.write(var_add_new_record_sap + " ")
-       f.write(var_add_new_record_contact + " ")
-       f.write(var_add_new_record_cource + "\n")
-       
-    # to display message output in textbox, we passed textbox argument to this function and insert the message
-    # remember to first delete the previous message from textbox so that it can't overlapp with current message
+        if var_add_new_record_name == "" or var_add_new_record_sap == "" or var_add_new_record_contact == "" or var_add_new_record_cource == "" :
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Fill all entries")
+        else :
+            f.write(var_add_new_record_name + " ")
+            f.write(var_add_new_record_sap + " ")
+            f.write(var_add_new_record_contact + " ")
+            f.write(var_add_new_record_cource + "\n")
     
-    textbox.delete("1.0", END)
-    textbox.insert(END, "Record added successfully")
+            # to display message output in textbox, we passed textbox argument to this function and insert the message
+            # remember to first delete the previous message from textbox so that it can't overlapp with current message
+    
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Record added successfully")
     
 def update_record(var_find_name, var_find_sap, var_update_record_contact, var_update_record_cource, textbox) :
     with open("StudentRecord.txt", "r") as f:
         # check for empty file
         f.seek(0, os.SEEK_END)
         if f.tell() == 0 :
-            print("")
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Empty file")
+        elif var_find_name == "" or var_find_sap == "" or var_update_record_contact == "" or var_update_record_cource == "" :
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Fill all entries")
         else :
             f.seek(0)
             data_update_record = f.readlines()
             data_update_record = [i.split() for i in data_update_record]
         
-        check = False
-        update_index = -1
-        for i in range(len(data_update_record)) :
-            if data_update_record[i][0] == var_find_name and data_update_record[i][1] == var_find_sap :
-                update_index = i
-                check = True
-        if check == True :
-            data_update_record[update_index][2] = var_update_record_contact
-            data_update_record[update_index][3] = var_update_record_cource
-            textbox.delete("1.0",END)
-            textbox.insert(END, "Record updated successfully")
-        else :
-            textbox.delete("1.0", END)
-            textbox.insert(END, "Record not found")
+            check = False
+            update_index = -1
+            for i in range(len(data_update_record)) :
+                if data_update_record[i][0] == var_find_name and data_update_record[i][1] == var_find_sap :
+                    update_index = i
+                    check = True
+            if check == True :
+                data_update_record[update_index][2] = var_update_record_contact
+                data_update_record[update_index][3] = var_update_record_cource
+                textbox.delete("1.0",END)
+                textbox.insert(END, "Record updated successfully")
+            else :
+                textbox.delete("1.0", END)
+                textbox.insert(END, "Record not found")
             
-    # reflecting update in file
-    with open("StudentRecord.txt", "w") as f:
-        for i in data_update_record :
-            lines = " ".join(i) + "\n"
-            f.write(lines)
+            # reflecting update in file
+            with open("StudentRecord.txt", "w") as f:
+                for i in data_update_record :
+                    lines = " ".join(i) + "\n"
+                    f.write(lines)
     
 def delete_record(var_delete_record_name, var_delete_record_sap, var_delete_record_contact, var_delete_record_cource, textbox) :
     with open("StudentRecord.txt", "r") as f :
@@ -54,30 +62,33 @@ def delete_record(var_delete_record_name, var_delete_record_sap, var_delete_reco
         if f.tell() == 0 :
             textbox.delete("1.0", END)
             textbox.insert(END, "Empty file")
+        elif var_delete_record_contact == "" or var_delete_record_sap == "" :
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Fill all entries")
         else :
             f.seek(0)
             data_delete_record = f.readlines()
             data_delete_record = [i.split() for i in data_delete_record]
         
-        check = False
-        delete_index = -1
-        for i in range(len(data_delete_record)) :
-            if data_delete_record[i][0] == var_delete_record_name and data_delete_record[i][1] == var_delete_record_sap :
-                delete_index = i
-                check = True
-        if check == True :
-            data_delete_record = list(data_delete_record)
-            data_delete_record.pop(delete_index)
-            textbox.delete("1.0",END)
-            textbox.insert(END, "Record deleted successfully")
-        else :
-            textbox.delete("1.0",END)
-            textbox.insert(END, "Record not found")
+            check = False
+            delete_index = -1
+            for i in range(len(data_delete_record)) :
+                if data_delete_record[i][0] == var_delete_record_name and data_delete_record[i][1] == var_delete_record_sap :
+                    delete_index = i
+                    check = True
+            if check == True :
+                data_delete_record = list(data_delete_record)
+                data_delete_record.pop(delete_index)
+                textbox.delete("1.0",END)
+                textbox.insert(END, "Record deleted successfully")
+            else :
+                textbox.delete("1.0",END)
+                textbox.insert(END, "Record not found")
 
-    # reflecting updates in file
-    with open("StudentRecord.txt", "w") as f:
-        for i in data_delete_record :
-            f.write(" ".join(i) + "\n")
+            # reflecting updates in file
+            with open("StudentRecord.txt", "w") as f:
+                for i in data_delete_record :
+                    f.write(" ".join(i) + "\n")
     
 def search_record(var_search_record_name, var_search_record_sap, textbox) :
     with open("StudentRecord.txt", "r") as f:
@@ -85,23 +96,26 @@ def search_record(var_search_record_name, var_search_record_sap, textbox) :
         if f.tell() == 0 :
             textbox.delete("1.0", END)
             textbox.insert(END, "Empty file")
-        else :
+        elif var_search_record_name == "" or var_search_record_sap == "" :
+            textbox.delete("1.0", END)
+            textbox.insert(END, "Fill all entries")
+        else : 
             f.seek(0)
             data_search_record = f.readlines()
             data_search_record = [i.split() for i in data_search_record]
         
-        check = False
-        search_index = -1
-        for i in range(len(data_search_record)) :
-            if data_search_record[i][0] == var_search_record_name and data_search_record[i][1] == var_search_record_sap :
-                search_index = i
-                check = True
-        if check == True :
-            textbox.delete("1.0",END)
-            textbox.insert(END, data_search_record[search_index])
-        else :
-            textbox.delete("1.0",END)
-            textbox.insert(END, "Record not found")
+            check = False
+            search_index = -1
+            for i in range(len(data_search_record)) :
+                if data_search_record[i][0] == var_search_record_name and data_search_record[i][1] == var_search_record_sap :
+                    search_index = i
+                    check = True
+            if check == True :
+                textbox.delete("1.0",END)
+                textbox.insert(END, data_search_record[search_index])
+            else :
+                textbox.delete("1.0",END)
+                textbox.insert(END, "Record not found")
 
 def view_all_records(textboxLabelframe, textboxMessage) :
     with open("StudentRecord.txt", "r") as f:
@@ -113,6 +127,9 @@ def view_all_records(textboxLabelframe, textboxMessage) :
             f.seek(0)
             data_view_all_records = f.readlines()
             data_view_all_records = [i.split() for i in data_view_all_records]
+            
+            textboxMessage.delete("1.0", END)
+            textboxMessage.insert(END, "Output\n successfully\n displayed")
             
             # convert upper list as a string
             textboxLabelframe.delete("1.0", END)
