@@ -136,6 +136,8 @@ def view_all_records(textboxLabelframe, textboxMessage) :
             for i in data_view_all_records :
                 textboxLabelframe.insert(END, " ".join(i) + "\n")
         
+def program_exit() :
+        exit(0)
 root.title("Student Record System")
 
 root.geometry("800x700+600+200")
@@ -381,7 +383,7 @@ button_search_record.place(x = 255, y = 375, width = 300)
 button_view_all_record = Button(text = "View All Records", font = ("Aerial", 25), cursor = "hand2", command = open_view_all_records_window)
 button_view_all_record.place(x = 255, y = 450, width = 300)
 
-button_exit = Button(text = "Exit", font = ("Aerial", 25), cursor = "hand2")
+button_exit = Button(text = "Exit", font = ("Aerial", 25), cursor = "hand2", command = program_exit)
 button_exit.place(x = 255, y = 525, width = 300)
 
 
